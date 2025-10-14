@@ -1,40 +1,9 @@
-    :root {
-      --bg-color: #3099e0; /* color of backround */
-      --txt-color: #111212; /* color of text */
-      --font-size-base: 16px;
-      --bolded-text: 2px; /*set to 0 for non bold and 2 for bold*/
-      --btn-color: #ffffff;
-      --btn-hover-color: #3099e0;
-      
-    }
-
-.body {
-  background: var(--bg-color);
-  padding: 0 24px;
-  color: var(--txt-color);
-  margin: 0;
-  height: 100vh;
+.grid {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  -webkit-text-stroke-width: var(--bolded-text);
+  flex-wrap: wrap;
+  width: 400px;
+  height: 300px;
 }
-/* style.css */
-.btn {
-    /* Basic styling */
-    background-color: #007bff; /* Blue background */
-    color: white; /* White text color */
-    padding: 10px 20px; /* Padding inside the button */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Change cursor to pointer on hover */
-
-    /* Optional: Hover effect */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
+.bg{
+  background-color: aquamarine;
 }
-
-.btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-/*var(--card-border-radius)*/
