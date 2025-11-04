@@ -65,9 +65,17 @@ canvas {
                 { x: 540, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 80, speed: 1.6, direction: -1 },
                 { x: 670, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.8, direction: -1 }
             ];
-            // Adjust the next level box position for the new spike layout if needed
-            nextLevelBox.y = canvas.height - 130;
-            nextLevelBox.height = 130;
+            } else if (level === 3) {
+            // Level 3: 7 spikes, placed higher up
+            spikes = [
+                { x: 150, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.0, direction: -1 },
+                { x: 280, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 70, speed: 1.2, direction: -1 },
+                { x: 410, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 60, speed: 1.4, direction: -1 },
+                { x: 540, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 80, speed: 1.6, direction: -1 },
+                { x: 670, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.8, direction: -1 },
+                { x: 540, y: 100, canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 80, speed: 1.6, direction: -1 },
+                { x: 670, y: 100, canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.8, direction: -1 }
+            ];
         }
     }
 
