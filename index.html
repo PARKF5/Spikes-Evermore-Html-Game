@@ -1,17 +1,91 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Memory Game</title>
-  <link rel="stylesheet" href="/style.css"></link>
-  <script src="/app.js" charset="utf-8"></script>
+    <title>Basic 2D Game</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #333; }
+        canvas { border: 1px solid #fff; display: block; margin: 20px auto; }
+    </style>
 </head>
-<body class="bg">
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
 
-  <h3>Score:<span id="result"></span></h3>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-  <div class="grid">
-  </div>
+        // Player properties
+        const player = {
+            x: 50,
+            y: canvas.height - 50,
+            width: 30,
+            height: 30,
+            color: 'blue',
+            speed: 5,
+            dx: 0, // change in x
+            dy: 0  // change in y
+        };
 
+        // Draw player
+        function drawPlayer() {
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        // Update game state
+        function update() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update player position
+            player.x += player.dx;
+            player.y += player.dy;
+
+            // Keep player within canvas bounds
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+            if (player.y < 0) player.y = 0;
+            if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
+
+            // Redraw player
+            drawPlayer();
+
+            requestAnimationFrame(update); // Loop the game
+        }
+
+        // Event listeners for movement
+        document.addEventListener('keydown', e => {
+            switch (e.key) {
+                case 'ArrowRight':
+                    player.dx = player.speed;
+                    break;
+                case 'ArrowLeft':
+                    player.dx = -player.speed;
+                    break;
+                case 'ArrowUp':
+                    player.dy = -player.speed;
+                    break;
+                case 'ArrowDown':
+                    player.dy = player.speed;
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup', e => {
+            switch (e.key) {
+                case 'ArrowRight':
+                case 'ArrowLeft':
+                    player.dx = 0;
+                    break;
+                case 'ArrowUp':
+                case 'ArrowDown':
+                    player.dy = 0;
+                    break;
+            }
+        });
+
+        // Start the game loop
+        update();
+    </script>
 </body>
 </html>
