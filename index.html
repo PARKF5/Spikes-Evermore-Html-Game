@@ -3,8 +3,16 @@
 <head>
 <title>Spikes Evermore</title>
 <style>
-body { margin: 0; overflow: hidden; background-color: #333; }
-canvas { border: 1px solid #fff; display: block; margin: 20px auto; }
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+canvas {
+    border: 1px solid #fff;
+    display: block;
+    margin: 20px auto;
+}
 </style>
 </head>
 <body>
@@ -12,6 +20,9 @@ canvas { border: 1px solid #fff; display: block; margin: 20px auto; }
 <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+
+// Game state variables
+let level = 1;
 
 // Player properties
 const player = {
@@ -26,12 +37,40 @@ const player = {
     dy: 0
 };
 
-// Spike properties
-const spikes = [
-    { x: 200, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 90, speed: 1.2, direction: -1 },
-    { x: 350, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.4, direction: -1 },
-    { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.6, direction: -1 }
-];
+// Next level box properties
+const nextLevelBox = {
+    x: 700, // Position after the spikes
+    y: canvas.height - 80,
+    width: 50,
+    height: 80,
+    color: 'green'
+};
+
+// Spike properties (defined in a function to allow resetting for new levels)
+let spikes = [];
+
+function initializeSpikes() {
+    spikes = [
+        { x: 200, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 90, speed: 1.2, direction: -1 },
+        { x: 350, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.4, direction: -1 },
+        { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.6, direction: -1 }
+    ];
+}
+
+// Function to reset game state for a new level
+function startNextLevel() {
+    level++;
+    alert(`Level ${level} started!`);
+    // Increase difficulty or change layout here for future levels
+    initializeSpikes(); // Reset spikes for new level
+    player.x = 50; // Reset player position
+    player.y = canvas.height - 50;
+    player.dx = 0;
+    player.dy = 0;
+}
+
+// Initialize spikes on game load
+initializeSpikes();
 
 // Draw player function
 function drawPlayer() {
@@ -53,19 +92,34 @@ function drawSpikes() {
     });
 }
 
+// Draw next level box function
+function drawNextLevelBox() {
+    ctx.fillStyle = nextLevelBox.color;
+    ctx.fillRect(nextLevelBox.x, nextLevelBox.y, nextLevelBox.width, nextLevelBox.height);
+    // Optional: add text
+    ctx.fillStyle = 'white';
+    ctx.font = '12px Arial';
+    ctx.fillText('Next', nextLevelBox.x + 10, nextLevelBox.y + nextLevelBox.height / 2 + 5);
+}
+
 // Check for collision between player and spikes function
-function checkCollision() {
+function checkSpikeCollision() {
     spikes.forEach(spike => {
-        if (player.x < spike.x + spike.width &&
-            player.x + player.width > spike.x &&
-            player.y < spike.y + spike.height &&
-            player.y + player.height > spike.y) {
+        if (player.x < spike.x + spike.width && player.x + player.width > spike.x && player.y < spike.y + spike.height && player.y + player.height > spike.y) {
             // Collision detected! Reset player position or end game
             alert('Game Over! You hit a spike!');
-            player.x = 50; // Reset player position
-            player.y = canvas.height - 50;
+            level = 1; // Reset level
+            startNextLevel(); // Restart first level
         }
     });
+}
+
+// Check for collision between player and next level box
+function checkNextLevelCollision() {
+    if (player.x < nextLevelBox.x + nextLevelBox.width && player.x + player.width > nextLevelBox.x && player.y < nextLevelBox.y + nextLevelBox.height && player.y + player.height > nextLevelBox.y) {
+        // Collision detected with next level box!
+        startNextLevel();
+    }
 }
 
 // Update game state function
@@ -86,7 +140,6 @@ function update() {
     // Update spike positions
     spikes.forEach(spike => {
         spike.y += spike.speed * spike.direction;
-
         // Reverse direction if spike reaches its movement limits
         if (spike.y >= spike.initialY || spike.y <= spike.initialY - spike.movementRange) {
             spike.direction *= -1;
@@ -99,8 +152,17 @@ function update() {
     // Draw spikes
     drawSpikes();
 
+    // Draw next level box
+    drawNextLevelBox();
+
     // Check for collisions
-    checkCollision();
+    checkSpikeCollision();
+    checkNextLevelCollision();
+
+    // Display current level
+    ctx.fillStyle = 'white';
+    ctx.font = '16px Arial';
+    ctx.fillText(`Level: ${level}`, 10, 20);
 
     requestAnimationFrame(update); // Loop the game
 }
@@ -108,19 +170,31 @@ function update() {
 // Event listeners for movement
 document.addEventListener('keydown', e => {
     switch (e.key) {
-        case 'ArrowRight': player.dx = player.xspeed; break;
-        case 'ArrowLeft': player.dx = -player.xspeed; break;
-        case 'ArrowUp': player.dy = -player.yspeed; break;
-        case 'ArrowDown': player.dy = player.yspeed; break;
+        case 'ArrowRight':
+            player.dx = player.xspeed;
+            break;
+        case 'ArrowLeft':
+            player.dx = -player.xspeed;
+            break;
+        case 'ArrowUp':
+            player.dy = -player.yspeed;
+            break;
+        case 'ArrowDown':
+            player.dy = player.yspeed;
+            break;
     }
 });
 
 document.addEventListener('keyup', e => {
     switch (e.key) {
         case 'ArrowRight':
-        case 'ArrowLeft': player.dx = 0; break;
+        case 'ArrowLeft':
+            player.dx = 0;
+            break;
         case 'ArrowUp':
-        case 'ArrowDown': player.dy = 0; break;
+        case 'ArrowDown':
+            player.dy = 0;
+            break;
     }
 });
 
