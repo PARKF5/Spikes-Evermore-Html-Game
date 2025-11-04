@@ -96,10 +96,6 @@ function drawSpikes() {
 function drawNextLevelBox() {
     ctx.fillStyle = nextLevelBox.color;
     ctx.fillRect(nextLevelBox.x, nextLevelBox.y, nextLevelBox.width, nextLevelBox.height);
-    // Optional: add text
-    ctx.fillStyle = 'white';
-    ctx.font = '12px Arial';
-    ctx.fillText('Next', nextLevelBox.x + 10, nextLevelBox.y + nextLevelBox.height / 2 + 5);
 }
 
 // Check for collision between player and spikes function
@@ -107,7 +103,7 @@ function checkSpikeCollision() {
     spikes.forEach(spike => {
         if (player.x < spike.x + spike.width && player.x + player.width > spike.x && player.y < spike.y + spike.height && player.y + player.height > spike.y) {
             // Collision detected! Reset player position or end game
-            alert('Game Over! You hit a spike!');
+           // alert('Game Over! You hit a spike!');
             level = 1; // Reset level
             startNextLevel(); // Restart first level
         }
