@@ -1,126 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic 2D Game with Spikes</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #333;
-        }
-        canvas {
-            border: 1px solid #fff;
-            display: block;
-            margin: 20px auto;
-        }
-    </style>
+<title>Basic 2D Game with Moving Spikes</title>
+<style>
+body { margin: 0; overflow: hidden; background-color: #333; }
+canvas { border: 1px solid #fff; display: block; margin: 20px auto; }
+</style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-        // Player properties
-        const player = {
-            x: 50,
-            y: canvas.height - 50,
-            width: 30,
-            height: 30,
-            color: 'blue',
-            speed: 5,
-            dx: 0, // change in x
-            dy: 0 // change in y
-        };
+// Player properties
+const player = {
+    x: 50,
+    y: canvas.height - 50,
+    width: 30,
+    height: 30,
+    color: 'blue',
+    speed: 5,
+    dx: 0,
+    dy: 0
+};
 
-        // Spike properties
-        const spikes = [
-            { x: 200, y: canvas.height - 30, width: 20, height: 30 },
-            { x: 350, y: canvas.height - 30, width: 20, height: 30 },
-            { x: 500, y: canvas.height - 30, width: 20, height: 30 }
-        ];
+// Spike properties
+const spikes = [
+    { x: 200, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 2, direction: 1 },
+    { x: 350, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.5, direction: -1 },
+    { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 2.5, direction: 1 }
+];
 
-        // Draw player function
-        function drawPlayer() {
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
+// Draw player function
+function drawPlayer() {
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+// Draw spikes function
+function drawSpikes() {
+    ctx.fillStyle = 'red'; // Spike color
+    spikes.forEach(spike => {
+        // Draw a triangle for the spike
+        ctx.beginPath();
+        ctx.moveTo(spike.x, spike.y + spike.height); // Bottom-left
+        ctx.lineTo(spike.x + spike.width / 2, spike.y); // Top-middle
+        ctx.lineTo(spike.x + spike.width, spike.y + spike.height); // Bottom-right
+        ctx.closePath();
+        ctx.fill();
+    });
+}
+
+// Check for collision between player and spikes function
+function checkCollision() {
+    spikes.forEach(spike => {
+        if (player.x < spike.x + spike.width &&
+            player.x + player.width > spike.x &&
+            player.y < spike.y + spike.height &&
+            player.y + player.height > spike.y) {
+            // Collision detected! Reset player position or end game
+            alert('Game Over! You hit a spike!');
+            player.x = 50; // Reset player position
+            player.y = canvas.height - 50;
         }
+    });
+}
 
-        // Draw spikes function
-        function drawSpikes() {
-            ctx.fillStyle = 'red'; // Spike color
-            spikes.forEach(spike => {
-                // Draw a triangle for the spike
-                ctx.beginPath();
-                ctx.moveTo(spike.x, spike.y + spike.height); // Bottom-left
-                ctx.lineTo(spike.x + spike.width / 2, spike.y); // Top-middle
-                ctx.lineTo(spike.x + spike.width, spike.y + spike.height); // Bottom-right
-                ctx.closePath();
-                ctx.fill();
-            });
+// Update game state function
+function update() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Update player position
+    player.x += player.dx;
+    player.y += player.dy;
+
+    // Keep player within canvas bounds
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+    if (player.y < 0) player.y = 0;
+    if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
+
+    // Update spike positions
+    spikes.forEach(spike => {
+        spike.y += spike.speed * spike.direction;
+
+        // Reverse direction if spike reaches its movement limits
+        if (spike.y >= spike.initialY || spike.y <= spike.initialY - spike.movementRange) {
+            spike.direction *= -1;
         }
+    });
 
-        // Check for collision between player and spikes
-        function checkCollision() {
-            spikes.forEach(spike => {
-                if (player.x < spike.x + spike.width &&
-                    player.x + player.width > spike.x &&
-                    player.y < spike.y + spike.height &&
-                    player.y + player.height > spike.y) {
-                    // Collision detected! Reset player position or end game
-                    alert('Game Over! You hit a spike!');
-                    player.x = 50; // Reset player position
-                    player.y = canvas.height - 50;
-                }
-            });
-        }
+    // Redraw player
+    drawPlayer();
 
-        // Update game state function
-        function update() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw spikes
+    drawSpikes();
 
-            // Update player position
-            player.x += player.dx;
-            player.y += player.dy;
+    // Check for collisions
+    checkCollision();
 
-            // Keep player within canvas bounds
-            if (player.x < 0) player.x = 0;
-            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-            if (player.y < 0) player.y = 0;
-            if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
+    requestAnimationFrame(update); // Loop the game
+}
 
-            // Redraw player
-            drawPlayer();
-            // Draw spikes
-            drawSpikes();
-            // Check for collisions
-            checkCollision();
+// Event listeners for movement
+document.addEventListener('keydown', e => {
+    switch (e.key) {
+        case 'ArrowRight': player.dx = player.speed; break;
+        case 'ArrowLeft': player.dx = -player.speed; break;
+        case 'ArrowUp': player.dy = -player.speed; break;
+        case 'ArrowDown': player.dy = player.speed; break;
+    }
+});
 
-            requestAnimationFrame(update); // Loop the game
-        }
+document.addEventListener('keyup', e => {
+    switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowLeft': player.dx = 0; break;
+        case 'ArrowUp':
+        case 'ArrowDown': player.dy = 0; break;
+    }
+});
 
-        // Event listeners for movement
-        document.addEventListener('keydown', e => {
-            switch (e.key) {
-                case 'ArrowRight': player.dx = player.speed; break;
-                case 'ArrowLeft': player.dx = -player.speed; break;
-                case 'ArrowUp': player.dy = -player.speed; break;
-                case 'ArrowDown': player.dy = player.speed; break;
-            }
-        });
-
-        document.addEventListener('keyup', e => {
-            switch (e.key) {
-                case 'ArrowRight':
-                case 'ArrowLeft': player.dx = 0; break;
-                case 'ArrowUp':
-                case 'ArrowDown': player.dy = 0; break;
-            }
-        });
-
-        // Start the game loop
-        update();
-    </script>
+// Start the game loop
+update();
+</script>
 </body>
 </html>
