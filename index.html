@@ -20,7 +20,8 @@ const player = {
     width: 30,
     height: 30,
     color: 'blue',
-    speed: 5,
+    xspeed: 5,
+    yspeed: 2,
     dx: 0,
     dy: 0
 };
@@ -107,10 +108,10 @@ function update() {
 // Event listeners for movement
 document.addEventListener('keydown', e => {
     switch (e.key) {
-        case 'ArrowRight': player.dx = player.speed; break;
-        case 'ArrowLeft': player.dx = -player.speed; break;
-        case 'ArrowUp': player.dy = -player.speed; break;
-        case 'ArrowDown': player.dy = player.speed; break;
+        case 'ArrowRight': player.dx = player.xspeed; break;
+        case 'ArrowLeft': player.dx = -player.xspeed; break;
+        case 'ArrowUp': player.dy = -player.yspeed; break;
+        case 'ArrowDown': player.dy = player.yspeed; break;
     }
 });
 
