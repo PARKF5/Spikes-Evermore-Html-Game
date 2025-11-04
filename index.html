@@ -59,26 +59,30 @@ canvas {
         } else if (level === 2) {
             // Level 2: 5 spikes
             spikes = [
-                { x: 150, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.0, direction: -1 },
-                { x: 280, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 70, speed: 1.2, direction: -1 },
-                { x: 410, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 60, speed: 1.4, direction: -1 },
-                { x: 540, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 80, speed: 1.6, direction: -1 },
-                { x: 670, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.8, direction: -1 }
+                { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1 },
+                { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1 },
+                { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.4, direction: -1 },
+                { x: 540, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.6, direction: -1 },
+                { x: 670, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.8, direction: -1 }
             ];
             } else if (level === 3) {
             // Level 3: 7 spikes
             spikes = [
-                { x: 150, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.0, direction: -1 },
-                { x: 280, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 70, speed: 1.2, direction: -1 },
-                { x: 410, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 60, speed: 1.4, direction: -1 },
-                { x: 540, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 80, speed: 1.6, direction: -1 },
-                { x: 670, y: canvas.height - 100, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.8, direction: -1 },
-                { x: 540, y: canvas.height - 90, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 80, speed: 1.6, direction: -1 },
-                { x: 670, y: canvas.height - 90, width: 20, height: 30, initialY: canvas.height - 100, movementRange: 50, speed: 1.8, direction: -1 }
+                { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1 },
+                { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1 },
+                { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.4, direction: -1 },
+                { x: 540, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.6, direction: -1 },
+                { x: 670, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.8, direction: -1 },
+                { x: 540, y: canvas.height - 60, width: 20, height: 30, initialY: canvas.height - 60, movementRange: 80, speed: 1.6, direction: -1, shape: S},
+                { x: 670, y: canvas.height - 60, width: 20, height: 30, initialY: canvas.height - 60, movementRange: 50, speed: 1.8, direction: -1, shape: S}
             ];
         }
     }
+    // S for square 
+    //nothing for triangle spike
 
+
+    
     // Function to reset game state for a new level
     function startNextLevel() {
         level++;
@@ -111,6 +115,13 @@ canvas {
     function drawSpikes() {
         ctx.fillStyle = 'red'; // Spike color
         spikes.forEach(spike => {
+
+            if(ctx.shape == S){
+                
+            }else{
+                
+
+
             // Draw a triangle for the spike
             ctx.beginPath();
             ctx.moveTo(spike.x, spike.y + spike.height); // Bottom-left
@@ -118,6 +129,7 @@ canvas {
             ctx.lineTo(spike.x + spike.width, spike.y + spike.height); // Bottom-right
             ctx.closePath();
             ctx.fill();
+            }
         });
     }
 
