@@ -1,17 +1,17 @@
-.body {
+body {
     margin: 0;
     overflow: hidden;
     background-color: #333;
     color: white; /* Added to make the level counter visible */
     font-family: sans-serif; /* Added for better font */
 }
-.canvas {
+canvas {
     border: 1px solid #fff;
     display: block;
     margin: 20px auto;
 }
 /* New style for the level counter */
-.levelCounter {
+#levelCounter {
     position: absolute;
     top: 10px;
     left: 10px;
