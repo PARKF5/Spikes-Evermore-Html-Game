@@ -1,9 +1,19 @@
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  width: 400px;
-  height: 300px;
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #333;
+    color: white; /* Added to make the level counter visible */
+    font-family: sans-serif; /* Added for better font */
 }
-.bg{
-  background-color: aquamarine;
+canvas {
+    border: 1px solid #fff;
+    display: block;
+    margin: 20px auto;
+}
+/* New style for the level counter */
+#levelCounter {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
 }
