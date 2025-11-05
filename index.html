@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
 <title>Spikes Evermore</title>
-
 <link rel="stylesheet" href="/style.css">
-
+<style>
+/* Optional basic style for the counter to make it visible */
+#levelCounter {
+    font-size: 24px;
+    font-family: sans-serif;
+    margin: 10px;
+}
+body {
+    /* Prevents the user from accidentally selecting canvas text */
+    user-select: none;
+}
+</style>
 </head>
-
 <body>
-
-<div id="levelCounter">Level: 1</div> <!-- Added level counter div -->
-
+<div id="levelCounter">Level: 1</div>
 <canvas id="gameCanvas" width="800" height="600"></canvas>
-
 <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -22,7 +26,7 @@ const levelCounter = document.getElementById('levelCounter'); // Get the level c
 
 // Game state variables
 let level = 1;
-
+// 106 is near the place to change jump boost color const
 // Player Vars
 let Upspeed = 4;
 let Downspeed = 4;
@@ -37,10 +41,10 @@ const player = {
     width: 30,
     height: 30,
     color: 'blue',
-    Upspeed:Upspeed,
-    Downspeed:Downspeed,
-    Rightspeed:Rightspeed,
-    Leftspeed:Leftspeed,
+    Upspeed: Upspeed,
+    Downspeed: Downspeed,
+    Rightspeed: Rightspeed,
+    Leftspeed: Leftspeed,
     dx: 0,
     dy: 0
 };
@@ -56,15 +60,15 @@ const nextLevelBox = {
 
 // Spike properties (defined in a function to allow resetting for new levels)
 let spikes = [];
+
 // Speed boost pads array (now a function scope variable)
 let speedBoostPads = [];
-
 
 function initializeSpikes() {
     if (level === 1) {
         spikes = [
-            // Vertical spikes (triangles)
-            { x: 200, y: canvas.height - 0, width: 20, height: 30, initialY: canvas.height - 0, movementRange: 90, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
+            // Vertical spikes (triangles for visual variety, but collision is still rectangular)
+            { x: 200, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 90, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
             { x: 350, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.4, direction: -1, shape: 'square', movementType: 'vertical' },
             { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.6, direction: -1, shape: 'square', movementType: 'vertical' }
         ];
@@ -99,18 +103,15 @@ function initializeSpikes() {
 // Function to initialize speed boost pads based on the current level
 function initializeSpeedBoostPads() {
     speedBoostPads = []; // Clear previous pads
+    // Define the rich violet color
+    const jumpBoostColor = '#9400d3'; // A rich violet hex number
+
     if (level === 1) {
-        speedBoostPads.push(
-          { x: 100, y: canvas.height - 200, width: 40, height: 40, color: 'violet', active: true}
-          );
+        speedBoostPads.push({ x: 100, y: canvas.height - 200, width: 40, height: 40, color: jumpBoostColor, active: true });
     }
-
     if (level === 2) {
-        speedBoostPads.push(
-          { x: 100, y: canvas.height - 200, width: 40, height: 40, color: 'violet', active: true}
-          );
+        speedBoostPads.push({ x: 100, y: canvas.height - 200, width: 40, height: 40, color: jumpBoostColor, active: true });
     }
-
 }
 
 // Update the level counter display function
@@ -146,6 +147,7 @@ function resetPlayerSpeed() {
         player.Downspeed = player.originalDownspeed;
         player.Rightspeed = player.originalRightspeed;
         player.Leftspeed = player.originalLeftspeed;
+
         // Clear original speed properties
         delete player.originalUpspeed;
         delete player.originalDownspeed;
@@ -172,10 +174,11 @@ function drawSpikes() {
     spikes.forEach(spike => {
         ctx.fillStyle = 'red';
         if (spike.shape === 'triangle') {
-            ctx.beginPath();
-            ctx.moveTo(spike.x, spike.y);
-            ctx.lineTo(spike.x + spike.width / 2, spike.y - spike.height);
-            ctx.lineTo(spike.x + spike.width, spike.y);
+            // Draw a triangle shape for visual representation
+            ctx.beginPath(); // Note: The collision uses the rectangular bounding box defined by x, y, width, height
+            ctx.moveTo(spike.x, spike.y + spike.height); // Bottom left
+            ctx.lineTo(spike.x + spike.width / 2, spike.y); // Top center
+            ctx.lineTo(spike.x + spike.width, spike.y + spike.height); // Bottom right
             ctx.closePath();
             ctx.fill();
         } else if (spike.shape === 'square') {
@@ -193,9 +196,30 @@ function drawSpeedBoostPads() {
     });
 }
 
+// --- Input Handling Changes ---
+// Object to keep track of which keys are currently held down
+const keys = {};
+document.addEventListener('keydown', e => {
+    // Use e.code instead of e.key for more consistent results across keyboard layouts
+    keys[e.code] = true;
+});
+
+document.addEventListener('keyup', e => {
+    keys[e.code] = false;
+});
 
 // Update functions
 function updatePlayer() {
+    // Reset player velocity based on the currently held keys
+    player.dx = 0;
+    player.dy = 0;
+
+    if (keys['ArrowRight'] || keys['KeyD']) player.dx = player.Rightspeed;
+    if (keys['ArrowLeft'] || keys['KeyA']) player.dx = -player.Leftspeed;
+    if (keys['ArrowUp'] || keys['KeyW']) player.dy = -player.Upspeed;
+    if (keys['ArrowDown'] || keys['KeyS']) player.dy = player.Downspeed;
+
+    // Apply movement based on current dx/dy values calculated above
     player.x += player.dx;
     player.y += player.dy;
 
@@ -226,8 +250,9 @@ function updateSpikes() {
     });
 }
 
-// Collision detection
+// Collision detection function
 function isColliding(rect1, rect2) {
+    // This function checks for AABB (Axis-Aligned Bounding Box) collision
     return (
         rect1.x < rect2.x + rect2.width &&
         rect1.x + rect1.width > rect2.x &&
@@ -239,13 +264,14 @@ function isColliding(rect1, rect2) {
 function checkCollisions() {
     // Check collision with spikes
     for (const spike of spikes) {
+        // The existing isColliding function works perfectly fine for the rectangular bounds of the spike objects
         if (isColliding(player, spike)) {
             alert('Game Over! Level: ' + level);
             level = 1; // Reset to level 1
             initializeSpikes();
             resetPlayer();
             resetPlayerSpeed(); // Ensure speed is reset on game over
-            return;
+            return; // Exit the function to prevent multiple alerts or immediate level change
         }
     }
 
@@ -253,7 +279,7 @@ function checkCollisions() {
     if (isColliding(player, nextLevelBox)) {
         level++;
         initializeSpikes();
-        resetPlayer();
+        resetPlayer(); // Player position reset after level initialization
         resetPlayerSpeed(); // Ensure speed is reset when starting a new level
     }
 
@@ -270,33 +296,28 @@ function resetPlayer() {
     player.y = canvas.height - 50;
     player.dx = 0;
     player.dy = 0;
+    // FIX: Clear the keys object so that any held keys don't cause immediate movement after respawn.
+    for (const key in keys) {
+        if (keys.hasOwnProperty(key)) {
+            keys[key] = false;
+        }
+    }
 }
-
-// Event listeners for player movement (keyboard arrows/WASD)
-document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'd') player.dx = player.Rightspeed;
-    if (e.key === 'ArrowLeft' || e.key === 'a') player.dx = -player.Leftspeed;
-    if (e.key === 'ArrowUp' || e.key === 'w') player.dy = -player.Upspeed;
-    if (e.key === 'ArrowDown' || e.key === 's') player.dy = player.Downspeed;
-});
-
-document.addEventListener('keyup', e => {
-    if (e.key === 'ArrowRight' || e.key === 'd') player.dx = 0;
-    if (e.key === 'ArrowLeft' || e.key === 'a') player.dx = 0;
-    if (e.key === 'ArrowUp' || e.key === 'w') player.dy = 0;
-    if (e.key === 'ArrowDown' || e.key === 's') player.dy = 0;
-});
 
 // Game loop function
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+
     drawNextLevelBox();
     drawSpeedBoostPads(); // Draw all active speed boost pads
     drawPlayer();
     drawSpikes();
-    updatePlayer();
+
+    updatePlayer(); // This is where we now read the `keys` object
     updateSpikes();
+
     checkCollisions();
+
     requestAnimationFrame(gameLoop);
 }
 
