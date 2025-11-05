@@ -95,10 +95,6 @@ function drawPlayer() {
 function drawNextLevelBox() {
     ctx.fillStyle = nextLevelBox.color;
     ctx.fillRect(nextLevelBox.x, nextLevelBox.y, nextLevelBox.width, nextLevelBox.height);
-    // Add text for level number
-    ctx.fillStyle = 'white';
-    ctx.font = '20px Arial';
-    ctx.fillText(`Lvl ${level}`, nextLevelBox.x - 500, nextLevelBox.y + 250);
 }
 
 function drawSpikes() {
