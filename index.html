@@ -61,21 +61,21 @@ function initializeSpikes() {
         // Level 2:
         spikes = [
             // Vertical spikes
-            { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.1, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 550, y: canvas.height - 50, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 100, speed: 1.5, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 650, y: canvas.height - 100, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.3, direction: -1, shape: 'triangle', movementType: 'vertical' }
+            { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.1, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 550, y: canvas.height - 50, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 100, speed: 1.5, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 650, y: canvas.height - 100, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.3, direction: -1, shape: 'square', movementType: 'vertical' }
         ];
     } else if (level === 3) {
         // Level 3:
         spikes = [
             // Vertical spikes
-            { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.1, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 550, y: canvas.height - 50, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 100, speed: 1.5, direction: -1, shape: 'triangle', movementType: 'vertical' },
-            { x: 650, y: canvas.height - 100, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.3, direction: -1, shape: 'triangle', movementType: 'vertical' },
+            { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.1, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 550, y: canvas.height - 50, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 100, speed: 1.5, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 650, y: canvas.height - 100, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.3, direction: -1, shape: 'square', movementType: 'vertical' },
             // Horizontal spikes (squares)
             { x: 550, y: canvas.height - 50, width: 30, height: 30, initialX: 550, movementRange: 100, speed: 1.5, direction: -1, shape: 'square', movementType: 'horizontal' },
             { x: 750, y: canvas.height - 250, width: 30, height: 30, initialX: 750, movementRange: 100, speed: 1.3, direction: -1, shape: 'square', movementType: 'horizontal' }
