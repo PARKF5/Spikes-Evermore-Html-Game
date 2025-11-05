@@ -23,6 +23,13 @@ const levelCounter = document.getElementById('levelCounter'); // Get the level c
 // Game state variables
 let level = 1;
 
+// Player Vars
+let Upspeed = 2;
+let Downspeed = 5;
+let Rightspeed = 9;
+let Leftspeed = 5;
+let speedbooststate = 3;
+
 // Player properties
 const player = {
     x: 50,
@@ -30,8 +37,10 @@ const player = {
     width: 30,
     height: 30,
     color: 'blue',
-    xspeed: 5,
-    yspeed: 2,
+    Upspeed:Upspeed,
+    Downspeed:Downspeed,
+    Rightspeed:Rightspeed,
+    Leftspeed:Leftspeed,
     dx: 0,
     dy: 0
 };
@@ -189,10 +198,10 @@ function resetPlayer() {
 
 // Event listeners for player movement (keyboard arrows/WASD)
 document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'd') player.dx = player.xspeed;
-    if (e.key === 'ArrowLeft' || e.key === 'a') player.dx = -player.xspeed;
-    if (e.key === 'ArrowUp' || e.key === 'w') player.dy = -player.yspeed;
-    if (e.key === 'ArrowDown' || e.key === 's') player.dy = player.yspeed;
+    if (e.key === 'ArrowRight' || e.key === 'd') player.dx = player.Rightspeed;
+    if (e.key === 'ArrowLeft' || e.key === 'a') player.dx = -player.Leftspeed;
+    if (e.key === 'ArrowUp' || e.key === 'w') player.dy = -player.Upspeed;
+    if (e.key === 'ArrowDown' || e.key === 's') player.dy = player.Downspeed;
 });
 
 document.addEventListener('keyup', e => {
