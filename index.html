@@ -28,7 +28,7 @@ let Upspeed = 4;
 let Downspeed = 4;
 let Rightspeed = 6;
 let Leftspeed = 6;
-let speedbooststate = 3;
+let speedboostamount = 2; // The multiplier for the speed boost
 
 // Player properties
 const player = {
@@ -56,6 +56,9 @@ const nextLevelBox = {
 
 // Spike properties (defined in a function to allow resetting for new levels)
 let spikes = [];
+// Speed boost pads array (now a function scope variable)
+let speedBoostPads = [];
+
 
 function initializeSpikes() {
     if (level === 1) {
@@ -89,12 +92,66 @@ function initializeSpikes() {
             { x: 750, y: canvas.height - 250, width: 30, height: 30, initialX: 750, movementRange: 100, speed: 1.3, direction: -1, shape: 'square', movementType: 'horizontal' }
         ];
     }
+    initializeSpeedBoostPads(); // Initialize pads whenever the level changes
     updateLevelCounter(); // Update the display when spikes are initialized/changed
+}
+
+// Function to initialize speed boost pads based on the current level
+function initializeSpeedBoostPads() {
+    speedBoostPads = []; // Clear previous pads
+    if (level === 1) {
+        speedBoostPads.push(
+          { x: 100, y: canvas.height - 200, width: 40, height: 40, color: 'violet', active: true}
+          );
+    }
+
+    if (level === 2) {
+        speedBoostPads.push(
+          { x: 100, y: canvas.height - 200, width: 40, height: 40, color: 'violet', active: true}
+          );
+    }
+
 }
 
 // Update the level counter display function
 function updateLevelCounter() {
     levelCounter.textContent = 'Level: ' + level;
+}
+
+// Function to apply the speed boost temporarily
+function applySpeedBoost(pad) {
+    if (pad.active) {
+        // Store the original speeds before boosting
+        player.originalUpspeed = player.Upspeed;
+        player.originalDownspeed = player.Downspeed;
+        player.originalRightspeed = player.Rightspeed;
+        player.originalLeftspeed = player.Leftspeed;
+
+        player.Upspeed *= speedboostamount;
+        player.Downspeed *= speedboostamount;
+        player.Rightspeed *= speedboostamount;
+        player.Leftspeed *= speedboostamount;
+
+        // Reset speed after a delay (5 seconds)
+        setTimeout(resetPlayerSpeed, 5000);
+        pad.active = false; // Make the specific pad one-time use
+    }
+}
+
+// Function to reset player speed to original values
+function resetPlayerSpeed() {
+    // Only reset if they haven't been reset yet by a new level or game over
+    if (player.originalUpspeed !== undefined) {
+        player.Upspeed = player.originalUpspeed;
+        player.Downspeed = player.originalDownspeed;
+        player.Rightspeed = player.originalRightspeed;
+        player.Leftspeed = player.originalLeftspeed;
+        // Clear original speed properties
+        delete player.originalUpspeed;
+        delete player.originalDownspeed;
+        delete player.originalRightspeed;
+        delete player.originalLeftspeed;
+    }
 }
 
 // Initialize spikes for level 1 on load
@@ -126,6 +183,16 @@ function drawSpikes() {
         }
     });
 }
+
+function drawSpeedBoostPads() {
+    speedBoostPads.forEach(pad => {
+        if (pad.active) {
+            ctx.fillStyle = pad.color;
+            ctx.fillRect(pad.x, pad.y, pad.width, pad.height);
+        }
+    });
+}
+
 
 // Update functions
 function updatePlayer() {
@@ -177,6 +244,7 @@ function checkCollisions() {
             level = 1; // Reset to level 1
             initializeSpikes();
             resetPlayer();
+            resetPlayerSpeed(); // Ensure speed is reset on game over
             return;
         }
     }
@@ -186,6 +254,14 @@ function checkCollisions() {
         level++;
         initializeSpikes();
         resetPlayer();
+        resetPlayerSpeed(); // Ensure speed is reset when starting a new level
+    }
+
+    // Check collision with speed boost pads
+    for (const pad of speedBoostPads) {
+        if (pad.active && isColliding(player, pad)) {
+            applySpeedBoost(pad);
+        }
     }
 }
 
@@ -215,6 +291,7 @@ document.addEventListener('keyup', e => {
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
     drawNextLevelBox();
+    drawSpeedBoostPads(); // Draw all active speed boost pads
     drawPlayer();
     drawSpikes();
     updatePlayer();
