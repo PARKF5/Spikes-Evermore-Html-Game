@@ -7,8 +7,8 @@ body {
     margin: 0;
     overflow: hidden;
     background-color: #333;
-    color: white;
-    font-family: sans-serif;
+    color: white; /* Added to make the level counter visible */
+    font-family: sans-serif; /* Added for better font */
 }
 canvas {
     border: 1px solid #fff;
@@ -22,49 +22,18 @@ canvas {
     left: 10px;
     font-size: 24px;
 }
-/* New style for the win screen container */
-#winScreen {
-    display: none; /* Hidden by default */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-}
-#winScreen h1 {
-    font-size: 48px;
-    color: #4CAF50;
-}
-#winScreen p {
-    font-size: 24px;
-}
 </style>
 </head>
 <body>
-<div id="levelCounter">Level: 1</div>
+<div id="levelCounter">Level: 1</div> <!-- Added level counter div -->
 <canvas id="gameCanvas" width="800" height="600"></canvas>
-
-<!-- Win screen container -->
-<div id="winScreen">
-    <h1>You Win!</h1>
-    <p>Congratulations, you reached Level <span id="winLevelDisplay"></span>!</p>
-</div>
-
 <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const levelCounter = document.getElementById('levelCounter');
-const winScreen = document.getElementById('winScreen');
-const winLevelDisplay = document.getElementById('winLevelDisplay');
+const levelCounter = document.getElementById('levelCounter'); // Get the level counter element
 
 // Game state variables
 let level = 1;
-const WIN_LEVEL = 4; // Variable to set the winning level
 
 // Player properties
 const player = {
@@ -81,70 +50,60 @@ const player = {
 
 // Next level box properties
 const nextLevelBox = {
-    x: 700,
+    x: 700, // Position after the spikes
     y: canvas.height - 80,
     width: 50,
     height: 80,
     color: 'green'
 };
 
-// Spike properties
+// Spike properties (defined in a function to allow resetting for new levels)
 let spikes = [];
 
 function initializeSpikes() {
     if (level === 1) {
         spikes = [
+            // Vertical spikes (triangles)
             { x: 200, y: canvas.height - 0, width: 20, height: 30, initialY: canvas.height - 0, movementRange: 90, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
             { x: 350, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.4, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.6, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.6, direction: -1, shape: 'square', movementType: 'vertical' }
         ];
     } else if (level === 2) {
+        // Level 2:
         spikes = [
-            { x: 150, y: canvas.height - 0, width: 20, height: 30, initialY: canvas.height - 0, movementRange: 100, speed: 1.5, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 300, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 90, speed: 1.7, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 450, y: canvas.height - 0, width: 20, height: 30, initialY: canvas.height - 0, movementRange: 80, speed: 1.9, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 600, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 2.1, direction: -1, shape: 'square', movementType: 'vertical' },
+            // Vertical spikes
+            { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.1, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 550, y: canvas.height - 50, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 100, speed: 1.5, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 650, y: canvas.height - 100, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.3, direction: -1, shape: 'square', movementType: 'vertical' }
         ];
     } else if (level === 3) {
+        // Level 3:
         spikes = [
-            { x: 100, y: canvas.height - 0, width: 20, height: 30, initialY: canvas.height - 0, movementRange: 120, speed: 2.0, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 250, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 110, speed: 2.2, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 400, y: canvas.height - 0, width: 20, height: 30, initialY: canvas.height - 0, movementRange: 100, speed: 2.4, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 550, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 90, speed: 2.6, direction: -1, shape: 'square', movementType: 'vertical' },
-            { x: 700, y: canvas.height - 0, width: 20, height: 30, initialY: canvas.height - 0, movementRange: 80, speed: 2.8, direction: -1, shape: 'square', movementType: 'vertical' },
+            // Vertical spikes
+            { x: 150, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 50, speed: 1.0, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 280, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 410, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 60, speed: 1.1, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 550, y: canvas.height - 50, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 100, speed: 1.5, direction: -1, shape: 'square', movementType: 'vertical' },
+            { x: 650, y: canvas.height - 100, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.3, direction: -1, shape: 'square', movementType: 'vertical' },
+            // Horizontal spikes (squares)
+            { x: 550, y: canvas.height - 50, width: 30, height: 30, initialX: 550, movementRange: 100, speed: 1.5, direction: -1, shape: 'square', movementType: 'horizontal' },
+            { x: 750, y: canvas.height - 250, width: 30, height: 30, initialX: 750, movementRange: 100, speed: 1.3, direction: -1, shape: 'square', movementType: 'horizontal' }
         ];
-    } else {
-        // Handle case where level is higher than defined levels, or just reset/end game
-        spikes = [];
     }
+    updateLevelCounter(); // Update the display when spikes are initialized/changed
 }
 
-function resetPlayerPosition() {
-    player.x = 50;
-    player.y = canvas.height - 50;
-    player.dx = 0;
-    player.dy = 0;
+// Update the level counter display function
+function updateLevelCounter() {
+    levelCounter.textContent = 'Level: ' + level;
 }
 
-function nextLevel() {
-    level++;
-    if (level > WIN_LEVEL) {
-        // Win condition met
-        showWinScreen();
-    } else {
-        initializeSpikes();
-        resetPlayerPosition();
-        levelCounter.textContent = 'Level: ' + level;
-    }
-}
+// Initialize spikes for level 1 on load
+initializeSpikes();
 
-function showWinScreen() {
-    winLevelDisplay.textContent = WIN_LEVEL;
-    winScreen.style.display = 'flex'; // Show the win screen
-    // Stop the game loop (optional, depending on desired behavior)
-    // For now, the game loop will continue running but the win screen is visible
-}
-
+// Draw functions
 function drawPlayer() {
     ctx.fillStyle = player.color;
     ctx.fillRect(player.x, player.y, player.width, player.height);
@@ -156,100 +115,118 @@ function drawNextLevelBox() {
 }
 
 function drawSpikes() {
-    ctx.fillStyle = 'red';
     spikes.forEach(spike => {
-        if (spike.shape === 'square') {
-            ctx.fillRect(spike.x, spike.y - spike.height, spike.width, spike.height);
+        ctx.fillStyle = 'red';
+        if (spike.shape === 'triangle') {
+            ctx.beginPath();
+            ctx.moveTo(spike.x, spike.y);
+            ctx.lineTo(spike.x + spike.width / 2, spike.y - spike.height);
+            ctx.lineTo(spike.x + spike.width, spike.y);
+            ctx.closePath();
+            ctx.fill();
+        } else if (spike.shape === 'square') {
+            ctx.fillRect(spike.x, spike.y, spike.width, spike.height);
         }
-        // More shapes could be added here
     });
 }
 
+// Update functions
 function updatePlayer() {
     player.x += player.dx;
-    // Simple gravity/jump physics (need a floor or platform logic to work properly)
-    // For this simple game, we just use key movements and boundaries
-    
-    // Boundary checks
-    if (player.x + player.width > canvas.width) {
-        player.x = canvas.width - player.width;
-    }
-    if (player.x < 0) {
-        player.x = 0;
-    }
-    // Vertical movement not implemented in original snippet, so player stays on the floor
-    player.y = canvas.height - player.height; 
+    player.y += player.dy;
+
+    // Boundary checks (optional for simple game)
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+    if (player.y < 0) player.y = 0;
+    if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
 }
 
 function updateSpikes() {
     spikes.forEach(spike => {
         if (spike.movementType === 'vertical') {
             spike.y += spike.speed * spike.direction;
-            if (spike.y <= spike.initialY - spike.movementRange || spike.y >= spike.initialY) {
-                spike.direction *= -1;
+            if (spike.direction === -1 && spike.y <= spike.initialY - spike.movementRange) {
+                spike.direction = 1;
+            } else if (spike.direction === 1 && spike.y >= spike.initialY) {
+                spike.direction = -1;
+            }
+        } else if (spike.movementType === 'horizontal') {
+            spike.x += spike.speed * spike.direction;
+            if (spike.direction === -1 && spike.x <= spike.initialX - spike.movementRange) {
+                spike.direction = 1;
+            } else if (spike.direction === 1 && spike.x >= spike.initialX) {
+                spike.direction = -1;
             }
         }
     });
 }
 
+// Collision detection
+function isColliding(rect1, rect2) {
+    return (
+        rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.y + rect1.height > rect2.y
+    );
+}
+
 function checkCollisions() {
-    // Player with spikes
-    spikes.forEach(spike => {
-        if (player.x < spike.x + spike.width &&
-            player.x + player.width > spike.x &&
-            player.y < spike.y &&
-            player.y + player.height > spike.y - spike.height) {
-            // Collision detected, reset level
-            resetPlayerPosition();
-        }
-    });
-
-    // Player with next level box
-    if (player.x < nextLevelBox.x + nextLevelBox.width &&
-        player.x + player.width > nextLevelBox.x &&
-        player.y < nextLevelBox.y + nextLevelBox.height &&
-        player.y + player.height > nextLevelBox.y) {
-        // Reached end point, go to next level
-        nextLevel();
-    }
-}
-
-function handleKeyDown(e) {
-    if (winScreen.style.display !== 'flex') { // Only allow movement if win screen is not displayed
-        if (e.key === 'Right' || e.key === 'ArrowRight') {
-            player.dx = player.xspeed;
-        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-            player.dx = -player.xspeed;
+    // Check collision with spikes
+    for (const spike of spikes) {
+        if (isColliding(player, spike)) {
+            alert('Game Over! Level: ' + level);
+            level = 1; // Reset to level 1
+            initializeSpikes();
+            resetPlayer();
+            return;
         }
     }
-}
 
-function handleKeyUp(e) {
-    if (e.key === 'Right' || e.key === 'ArrowRight' || e.key === 'Left' || e.key === 'ArrowLeft') {
-        player.dx = 0;
+    // Check collision with next level box
+    if (isColliding(player, nextLevelBox)) {
+        level++;
+        initializeSpikes();
+        resetPlayer();
     }
 }
 
-document.addEventListener('keydown', handleKeyDown);
-document.addEventListener('keyup', handleKeyUp);
+function resetPlayer() {
+    player.x = 50;
+    player.y = canvas.height - 50;
+    player.dx = 0;
+    player.dy = 0;
+}
 
+// Event listeners for player movement (keyboard arrows/WASD)
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'd') player.dx = player.xspeed;
+    if (e.key === 'ArrowLeft' || e.key === 'a') player.dx = -player.xspeed;
+    if (e.key === 'ArrowUp' || e.key === 'w') player.dy = -player.yspeed;
+    if (e.key === 'ArrowDown' || e.key === 's') player.dy = player.yspeed;
+});
+
+document.addEventListener('keyup', e => {
+    if (e.key === 'ArrowRight' || e.key === 'd') player.dx = 0;
+    if (e.key === 'ArrowLeft' || e.key === 'a') player.dx = 0;
+    if (e.key === 'ArrowUp' || e.key === 'w') player.dy = 0;
+    if (e.key === 'ArrowDown' || e.key === 's') player.dy = 0;
+});
+
+// Game loop function
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (winScreen.style.display !== 'flex') {
-        drawNextLevelBox();
-        drawSpikes();
-        drawPlayer();
-        updatePlayer();
-        updateSpikes();
-        checkCollisions();
-    }
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+    drawNextLevelBox();
+    drawPlayer();
+    drawSpikes();
+    updatePlayer();
+    updateSpikes();
+    checkCollisions();
     requestAnimationFrame(gameLoop);
 }
 
-// Initial setup
-initializeSpikes();
+// Start the game loop
 gameLoop();
 </script>
 </body>
