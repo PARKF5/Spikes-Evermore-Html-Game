@@ -6,11 +6,13 @@
 </head>
 <body>
 <div id="levelCounter">Level: 1</div>
+<div id="cumCounter">Completed: 0</div>
 <canvas id="gameCanvas" width="800" height="600"></canvas>
 <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const levelCounter = document.getElementById('levelCounter'); // Get the level counter element
+const cumCounter = document.getElementById('cumCounter');
 
 // Game state variables
 let level = 1;
@@ -139,17 +141,17 @@ function initializeSpikes() {
  } else if (level === 9) {
  // Level 9: Dense vertical movement
  spikes = [
- { x: 120, y: canvas.height - 30, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 3.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
- { x: 150, y: canvas.height - 580, width: 30, height: 30, initialY: canvas.height - 580, movementRange: 550, speed: 3.0, direction: 1, shape: 'triangle', movementType: 'vertical' },
- { x: 250, y: canvas.height - 30, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 3.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
- { x: 350, y: canvas.height - 580, width: 30, height: 30, initialY: canvas.height - 580, movementRange: 550, speed: 3.0, direction: 1, shape: 'triangle', movementType: 'vertical' },
- { x: 450, y: canvas.height - 30, width: 30, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 3.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
- { x: 550, y: canvas.height - 580, width: 30, height: 30, initialY: canvas.height - 580, movementRange: 550, speed: 3.0, direction: 1, shape: 'triangle', movementType: 'vertical' }
+ { x: 120, y: canvas.height - 30, width: 40, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 3.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
+ { x: 150, y: canvas.height - 30, width: 40, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 2.0, direction: 1, shape: 'triangle', movementType: 'vertical' },
+ { x: 250, y: canvas.height - 30, width: 40, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 3.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
+ { x: 350, y: canvas.height - 30, width: 40, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 3.0, direction: 1, shape: 'triangle', movementType: 'vertical' },
+ { x: 450, y: canvas.height - 30, width: 40, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 2.0, direction: -1, shape: 'triangle', movementType: 'vertical' },
+ { x: 550, y: canvas.height - 30, width: 40, height: 30, initialY: canvas.height - 30, movementRange: 550, speed: 3.0, direction: 1, shape: 'triangle', movementType: 'vertical' }
  ];
  } else if (level === 10) {
  // Level 10: Final Gauntlet of Speed
  spikes = [
- { x: 150, y: canvas.height - 100, width: 30, height: 30, initialX: 100, movementRange: 600, speed: 5.0, direction: 1, shape: 'square', movementType: 'horizontal' },
+ { x: 550, y: canvas.height - 30, width: 50, height: 50, initialX: 550, movementRange: 400, speed: 3.0, direction: 1, shape: 'square', movementType: 'horizontal' },
  { x: 700, y: canvas.height - 200, width: 30, height: 30, initialX: 700, movementRange: 600, speed: 5.0, direction: -1, shape: 'square', movementType: 'horizontal' },
  { x: 100, y: canvas.height - 300, width: 30, height: 30, initialX: 100, movementRange: 600, speed: 5.0, direction: 1, shape: 'square', movementType: 'horizontal' },
  { x: 700, y: canvas.height - 400, width: 30, height: 30, initialX: 700, movementRange: 600, speed: 5.0, direction: -1, shape: 'square', movementType: 'horizontal' },
@@ -189,6 +191,7 @@ function initializeSpeedBoostPads() {
 // Update the level counter display function
 function updateLevelCounter() {
  levelCounter.textContent = 'Level: ' + level;
+ cumCounter.textContent = 'Completed: ' + completedtimes;
 }
 
 // Function to apply the speed boost temporarily

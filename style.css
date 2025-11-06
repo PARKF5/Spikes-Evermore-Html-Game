@@ -2,7 +2,6 @@ body {
     margin: 0;
     overflow: hidden;
     background-color: #333;
-    color: white; /* Added to make the level counter visible */
     font-family: sans-serif; /* Added for better font */
 }
 canvas {
@@ -16,4 +15,12 @@ canvas {
     top: 10px;
     left: 10px;
     font-size: 24px;
+    color: white;
+}
+#cumCounter {
+    position: absolute;
+    top: 70px;
+    left: 10px;
+    font-size: 28px;
+    color: rgb(228, 235, 31);
 }
