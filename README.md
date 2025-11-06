@@ -6,7 +6,42 @@
 
 First, go to the latest released version of Spikes evermore
 
-Go to index.html and copy the text
+you can just clcik the text that says the release 
+
+<img width="268" height="123" alt="image" src="https://github.com/user-attachments/assets/f3ea568e-0932-4c33-98c9-71a53af77285" />
+
+
+then clcik source code.zip - it should download
+
+open the file in foulder
+
+<img width="376" height="125" alt="image" src="https://github.com/user-attachments/assets/949ce116-2265-4748-91bb-382f2aff6dce" />
+
+
+open it
+
+
+<img width="786" height="34" alt="image" src="https://github.com/user-attachments/assets/9e14b89e-224c-4b5f-aa12-d66715b4b603" />
+
+
+then open it
+
+<img width="796" height="58" alt="image" src="https://github.com/user-attachments/assets/769a4955-a637-47b3-9796-5b118620f88f" />
+
+
+then clcik once on index.html (dont open)
+
+<img width="772" height="327" alt="image" src="https://github.com/user-attachments/assets/d04b6396-26aa-4310-96b2-d877890da532" />
+
+
+then you click with 2 fingers to get this
+
+<img width="241" height="400" alt="image" src="https://github.com/user-attachments/assets/c6c87696-c4d2-4c79-8d33-b8cad80d2198" />
+
+
+then click get info
+
+then copy that - (use this process agian for stylee css later )
 
 then go to <a href="https://playcode.io/">playcode</a> click start coding
 
@@ -16,7 +51,7 @@ After this, you can delete the src folder
 
 Then paste the index.html file from GitHub into the index.html file in PlayCode
 
-Then go to the style.css file on GitHub and copy the text 
+Then go to the style.css file - use previous process to get the raw file
 
 Then paste the style.css into the style.css in PlayCode
 
