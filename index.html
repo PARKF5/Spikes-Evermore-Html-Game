@@ -65,9 +65,9 @@ function initializeSpikes() {
  if (level === 1) {
  spikes = [
  // Vertical spikes (triangles for visual variety, but collision is still rectangular)
- { x: 200, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 90, speed: 1.2, direction: -1, shape: 'triangle', movementType: 'vertical' },
- { x: 350, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.4, direction: -1, shape: 'triangle', movementType: 'vertical' },
- { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.6, direction: -1, shape: 'triangle', movementType: 'vertical' }
+ { x: 200, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 90, speed: 1.2, direction: -1, shape: 'square', movementType: 'vertical' },
+ { x: 350, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 80, speed: 1.4, direction: -1, shape: 'square', movementType: 'vertical' },
+ { x: 500, y: canvas.height - 30, width: 20, height: 30, initialY: canvas.height - 30, movementRange: 70, speed: 1.6, direction: -1, shape: 'square', movementType: 'vertical' }
  ];
  } else if (level === 2) {
  // Level 2:
